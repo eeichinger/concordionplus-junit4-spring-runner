@@ -69,7 +69,7 @@
             <xsl:attribute name="class">
                 success-<xsl:value-of select="@success"/>
             </xsl:attribute>
-            <td><a href="http://jira.ncr.com/browse/{@issuenumber}" target="_blank"><xsl:value-of select="@issuenumber"/></a>&#160;</td>
+            <td><a href="http://jira.example.com/browse/{@issuenumber}" target="_blank"><xsl:value-of select="@issuenumber"/></a>&#160;</td>
             <td><a href="{@path}"><xsl:value-of select="@title"/></a>&#160;</td>
             <td><xsl:value-of select="@success"/>&#160;</td>
         </tr>
