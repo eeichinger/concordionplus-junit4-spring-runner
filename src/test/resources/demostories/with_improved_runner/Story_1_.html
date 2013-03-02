@@ -1,0 +1,115 @@
+<html xmlns:c="http://www.concordion.org/2007/concordion" xmlns:cp="http://www.agileinsider.org/concordion/plus">
+<head>
+  <title>STORY-1 - Using improved Concordion+/Spring runner</title>
+</head>
+<body>
+<div class="story">
+    <h3><a href="http://jira.example.com/browse/STORY-1"><span class="issuenumber">STORY-1</span> - Demo Scenarios</a></h3>
+    <div>
+        In order to run spring-based tests using concordion<br/>
+        As a developer<br/>
+        I want a runner that integrates both<br/>
+    </div>
+</div>
+<div cp:scenario="1. Story @BeforeClass and @AfterClass get invoked">
+    <h3>1. Scenario passes</h3>
+    <table>
+        <tr>
+            <td valign="top">GIVEN :</td>
+            <td>a story with a few scenarios</td>
+        </tr>
+        <tr>
+            <td valign="top">WHEN :</td>
+            <td>the runner executes any scenario</td>
+        </tr>
+        <tr>
+            <td valign="top">THEN :</td>
+            <td>the story's @BeforeClass and @AfterClass methods got invoked <span c:assertEquals="beforeClassCalled">1</span> time
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div cp:scenario="2. Scenario passes">
+    <h3>2. Scenario passes</h3>
+    <table>
+        <tr>
+            <td valign="top">GIVEN :</td>
+            <td>a scenario is defined</td>
+        </tr>
+        <tr>
+            <td valign="top">WHEN :</td>
+            <td>the runner <span c:execute="execute()">executes</span> the scenario</td>
+        </tr>
+        <tr>
+            <td valign="top">THEN :</td>
+            <td>the scenario's @Before and @After methods got invoked <span c:assertEquals="beforeCalled">1</span> time
+                and the story's @BeforeClass and @AfterClass methods still only got invoked <span c:assertEquals="beforeClassCalled">1</span> time
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div cp:scenario="3. Scenario fails">
+    <h3>3. Scenario fails</h3>
+    <table>
+        <tr>
+            <td valign="top">GIVEN :</td>
+            <td>a scenario that fails</td>
+        </tr>
+        <tr>
+            <td valign="top">WHEN :</td>
+            <td>when the scenario is executed and the expectation fails
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">THEN :</td>
+            <td>
+                <div><b>TODO: change "dummyBean" to something else to make the scenario fail and see the System.out output
+                    and html report</b></div>
+                <div>the test outputs useful error information for the failed expectation <span c:assertEquals="execute()">dummyBean</span></div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div cp:scenario="4. Ignored Scenario" cp:ignore="true">
+    <h3>4. Ignored Scenario</h3>
+    <table>
+        <tr>
+            <td valign="top">GIVEN :</td>
+            <td>a scenario is marked with cp:ignore="true"</td>
+        </tr>
+        <tr>
+            <td valign="top">WHEN :</td>
+            <td>the runner checks the ignore flag</td>
+        </tr>
+        <tr>
+            <td valign="top">THEN :</td>
+            <td>the scenario will be treated like a @Ignore annotated unit test</td>
+        </tr>
+    </table>
+</div>
+
+<div cp:scenario="5. Apply standard junit test annotations like Spring @Repeat and @Test">
+    <h3>5. Apply standard junit test annotations like Spring @Repeat and @Test</h3>
+    <table>
+        <tr>
+            <td valign="top">GIVEN :</td>
+            <td>a method is annotated with @ScenarioAnnotations</td>
+        </tr>
+        <tr>
+            <td valign="top">WHEN :</td>
+            <td>the runner applies this method's annotation(s) to each scenario</td>
+        </tr>
+        <tr>
+            <td valign="top">THEN :</td>
+            <td>
+                <div><b>TODO: change to > 1000 to see the timeout happening</b></div>
+                <div>e.g. <span c:execute="executeWithDelay(500)">junit's @Test(timeout=1000) setting will be applied</span></div>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

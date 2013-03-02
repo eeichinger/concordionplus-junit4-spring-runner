@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.oakinger.concordion</groupId>
+    <artifactId>concordionplus_spring_runner</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <description>
+        Implements and demonstrates the use of a junit runner that integrates
+        Concordion+ (http://www.agileinsider.org/concordion-plus/) and
+        Spring-Test (http://static.springsource.org/spring/docs/current/spring-framework-reference/html/testing.html#integration-testing)
+    </description>
+
+    <properties>
+        <!--
+        where to output concordion reports, see org.concordion.internal.ConcordionBuilder.PROPERTY_OUTPUT_DIR,
+        defaults to ${java.io.tmpdir}/concordion
+        -->
+        <concordion.output.dir>${project.build.directory}/concordion</concordion.output.dir>
+    </properties>
+
+    <build>
+        <plugins>
+            <!-- make sure we tell concordion where to output reports to -->
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemProperties>
+                        <property>
+                            <name>concordion.output.dir</name>
+                            <value>${concordion.output.dir}</value>
+                        </property>
+                    </systemProperties>
+                </configuration>
+            </plugin>
+            <!--
+            create an index file of all individual concordion reports. I like this better than using mvn:site and
+            http://bassman5.github.com/maven-concordion-reporting-plugin/
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>concordion-summary</id>
+                        <phase>test</phase>
+                        <configuration>
+                            <target>
+                                <mkdir dir="${concordion.output.dir}"/>
+                                <java classname="org.oakinger.concordion.ConcordionSummaryReporter">
+                                    <arg value="${concordion.output.dir}"/>
+                                    <classpath>
+                                        <pathelement path="${project.build.outputDirectory}"/>
+                                        <pathelement path="${java.class.path}"/>
+                                    </classpath>
+                                </java>
+                                <xslt in="${concordion.output.dir}/concordion-index.xml"
+                                      out="${concordion.output.dir}/index.html"
+                                      style="${project.basedir}/src/test/concordion/concordion-summary-report.xslt">
+                                </xslt>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.10</version>
+            </dependency>
+            <dependency>
+                <groupId>org.concordion</groupId>
+                <artifactId>concordion</artifactId>
+                <version>1.4.3</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>junit</groupId>
+                        <artifactId>junit-dep</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.agileinsider</groupId>
+                <artifactId>concordion-plus</artifactId>
+                <version>1.1.2</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>1.1.1</version>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>3.2.0.RELEASE</version>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-test</artifactId>
+                <version>3.2.0.RELEASE</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.concordion</groupId>
+            <artifactId>concordion</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.agileinsider</groupId>
+            <artifactId>concordion-plus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+
+    </dependencies>
+
+</project>
